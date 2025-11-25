@@ -49,8 +49,8 @@ INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
 ```
 
 ## Deploying to Tapis Pods
-[!WARNING]
-Following these instructions will deploy an application to the public internet using the [Tapis Pods service](https://tapis.readthedocs.io/en/latest/technical/pods.html).
+> [!WARNING]
+> Following these instructions will deploy an application to the public internet using the [Tapis Pods service](https://tapis.readthedocs.io/en/latest/technical/pods.html).
 
 1. Run `docker login` and make sure that you are signed in to a valid Dockerhub account.
 1. Edit `.env.deploy` with a custom `DOCKER_IMAGE_TAG` for your deployment. Enter a custom `POD_ID` and `VOLUME_ID` to use within the Tapis Pods service. (these should be lowercase alphanumeric). Double check your Tapis credentials here as well.
