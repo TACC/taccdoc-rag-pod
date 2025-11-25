@@ -33,10 +33,10 @@ Cite your sources using the provided URLs. Provide detailed instructions and cod
 Format responses in markdown with properly formatted code blocks.
 """
 
-rag_agent = Agent(rag_model, instrument=False, instructions=instructions)
+agent = Agent(rag_model, instrument=False, instructions=instructions)
 
 
-@rag_agent.tool_plain
+@agent.tool_plain
 def documentation_lookup(query: str) -> list[RagDocument]:
     docs_res = []
     query_resp = collection.query(query_texts=[query])
@@ -48,7 +48,7 @@ def documentation_lookup(query: str) -> list[RagDocument]:
     return docs_res
 
 
-app = rag_agent.to_ag_ui()
+app = agent.to_ag_ui()
 # If you want the server to run on invocation, you can do the following:
 if __name__ == "__main__":
     import uvicorn

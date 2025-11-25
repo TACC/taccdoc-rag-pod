@@ -1,7 +1,7 @@
 import "@copilotkit/react-ui/styles.css";
 import { CopilotChat } from "@copilotkit/react-ui";
 
-export function YourApp() {
+export function AgentApp() {
   return (
     <main>
       <CopilotChat
@@ -18,7 +18,7 @@ export function YourApp() {
 export default function Home() {
   return (
     <div className="m-5">
-      <YourApp />
+      <AgentApp />
     </div>
   );
 }
