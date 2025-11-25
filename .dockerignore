@@ -1,2 +1,5 @@
 .venv
 .env
+.vscode
+node_modules
+client/node_modules
