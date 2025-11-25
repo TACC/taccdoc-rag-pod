@@ -14,13 +14,13 @@ The Dockerfile builds an image that, when run, serves a NextJS application with 
     You should also have the following installed on your local machine:
     - [uv](https://docs.astral.sh/uv/getting-started/installation/)
     - [NodeJS 22 with npm](https://nodejs.org/en/download)
-    - [Docker](https://www.docker.com/get-started/) (to push images you will need to be looged into DockerHub or another container registry)
+    - [Docker](https://www.docker.com/get-started/) (to push images you will need to be logged into DockerHub or another container registry)
 1. Copy the environment files to your local machine:
     ```
     cp .env.sample .env
     cp .env.deploy .env.deploy
     ```
-1. Update your `.env` and `.env.deploy` with your OpenAI and TACC credentials where indicated.
+1. Update `.env` and `.env.deploy` with your OpenAI and TACC credentials where indicated.
 
 ## Running Locally
 A Makefile is provided with several convenience methods. To serve the application locally, run the following:
