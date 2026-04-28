@@ -39,6 +39,7 @@ def main():
         t.pods.update_pod(
             pod_id=POD_ID,
             networking={"default": {"protocol": "http", "port": 8888}},
+            time_to_stop_default=-1,
             volume_mounts={
                 VOLUME_ID: {
                     "type": "tapisvolume",
@@ -55,6 +56,7 @@ def main():
             pod_id=POD_ID,
             image=DOCKER_IMAGE_TAG,
             networking={"default": {"protocol": "http", "port": 8888}},
+            time_to_stop_default=-1,
             volume_mounts={
                 VOLUME_ID: {
                     "type": "tapisvolume",
