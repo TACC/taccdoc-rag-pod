@@ -41,9 +41,9 @@ def main():
             networking={"default": {"protocol": "http", "port": 8888}},
             time_to_stop_default=-1,
             volume_mounts={
-                VOLUME_ID: {
+                "/mnt/data": {
                     "type": "tapisvolume",
-                    "mount_path": "/mnt/data",
+                    "source_id": VOLUME_ID,
                 }
             },
         )
@@ -58,9 +58,9 @@ def main():
             networking={"default": {"protocol": "http", "port": 8888}},
             time_to_stop_default=-1,
             volume_mounts={
-                VOLUME_ID: {
+                "/mnt/data": {
                     "type": "tapisvolume",
-                    "mount_path": "/mnt/data",
+                    "source_id": VOLUME_ID,
                 }
             },
         )

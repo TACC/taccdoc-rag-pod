@@ -24,3 +24,19 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.copilotKitAssistantMessage:first-child
+  .copilotKitMessageControls
+  button[aria-label="Thumbs up"] {
+  display: none !important;
+}
+
+.copilotKitAssistantMessage:first-child
+  .copilotKitMessageControls
+  button[aria-label="Thumbs down"] {
+  display: none !important;
+}
+
+.poweredBy.poweredBy.poweredBy {
+  visibility: hidden !important;
+}

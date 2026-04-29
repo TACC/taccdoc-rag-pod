@@ -9,7 +9,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <CopilotKit
           runtimeUrl="/api/copilotkit"
           agent="my_agent"
-          showDevConsole={false}
+          enableInspector={false}
         >
           {children}
         </CopilotKit>
