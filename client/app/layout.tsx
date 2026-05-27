@@ -17,9 +17,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           agent="my_agent"
           enableInspector={false}
         >
+          <Toaster />
           {children}
         </CopilotKit>
-        <Toaster />
       </body>
     </html>
   );

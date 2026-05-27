@@ -144,3 +144,8 @@
     @apply font-sans;
   }
 }
+
+/* Prevent code blocks from rendering as a single line */
+pre[data-streamdown="code-block-body"] > code > span {
+  display: block;
+}
