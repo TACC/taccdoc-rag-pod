@@ -10,7 +10,7 @@ start:
 
 .phony: start-dev
 start-dev: 
-	docker run  -p 8888:8888  --rm  -v .env:/mnt/data/.env -v ./supervisord.dev.conf:/etc/supervisor/conf.d/supervisord.conf -v ./client/app:/client/app $(DOCKER_IMAGE_TAG)
+	docker run  -p 8888:8888  --rm  -v .env:/mnt/data/.env -v ./supervisord.dev.conf:/etc/supervisor/conf.d/supervisord.conf -v ./client/app:/client/app -v ./client/components:/client/components $(DOCKER_IMAGE_TAG)
 
 .phony: push
 push:
