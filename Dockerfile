@@ -1,6 +1,5 @@
 FROM node:22
 
-RUN apt-get update && apt-get install -y supervisor
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 COPY pyproject.toml uv.lock .python-version ./
 RUN uv sync
@@ -21,6 +20,6 @@ COPY agent.py /agent.py
 RUN --mount=type=secret,id=env uv run --env-file=/run/secrets/env scripts/setup_chromadb.py
 
 EXPOSE 8888
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY supervisord.conf /etc/supervisor/supervisord.conf
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+CMD ["uv", "run", "supervisord", "-c", "/etc/supervisor/supervisord.conf"]
