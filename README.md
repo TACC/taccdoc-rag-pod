@@ -6,6 +6,26 @@ This repo contains code and tooling for deploying an agentic application to the 
 ### Architecture
 The Dockerfile builds an image that, when run, serves a NextJS application with a chatbot powered by Copilotkit. The chatbot is backed by a Pydantic-AI agent that searches a ChromaDB vector database containing the contents of TACC's technical documentation. To make the image as portable as possible, the database is populated at build time and run in-process. The NextJS frontend and Pydantic-AI backend are run in the same container, with the processes managed by supervisord (to change the runtime config, edit `supervisord.conf`).
 
+The frontend can also connect to an externally hosted AG-UI agent. Branding and agent routing are runtime configuration so multiple projects can deploy the same application image without maintaining separate frontend forks.
+
+### Chatbot configuration
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `CHATBOT_WELCOME_MESSAGE` | `Welcome to the TACC Documentation RAG (Beta). How can I help?` | Welcome text displayed by CopilotChat. |
+| `COPILOTKIT_AGENT_ID` | `my_agent` | Agent identifier shared by the frontend and CopilotKit runtime. |
+| `AG_UI_AGENT_URL` | `http://0.0.0.0:8000/` | AG-UI endpoint used by the CopilotKit runtime. The default selects the bundled Pydantic-AI agent. |
+
+For example, a MATCSSI deployment using an externally provided AG-UI service can set:
+
+```dotenv
+CHATBOT_WELCOME_MESSAGE="Welcome to the MATCSSI Documentation RAG (Beta). How can I help?"
+COPILOTKIT_AGENT_ID="matcssi_agent"
+AG_UI_AGENT_URL="https://example.org/matcssi-agent/"
+```
+
+These values are read when the application runs, rather than when its image is built.
+
 ## Repository Setup
 1. Before you start, you should have the following credentials handy:
     - A valid OpenAI API key
@@ -65,9 +85,10 @@ INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
 The `deploy-pod` command creates a pod with `.env` mounted at `/mnt/data/.env`. If the pod with ID `POD_ID` already exists, it will be updated and restarted.
 
 ## Custom development
-This repo is meant to be easily forked to deploy custom agents/chatbots. To customize this repo, you should start in the following places:
+This repo is intended to support multiple agent/chatbot deployments from shared frontend code. Prefer the runtime configuration above for project branding and agent selection. Source changes should be reserved for behavior that all deployments can share.
+
+To customize the underlying implementation:
 
 - To set up a custom agent, edit `agent.py` and replace `agent` with your own Pydantic-AI agent ([see docs](https://ai.pydantic.dev/))
 - To customize the frontend, edit `client/app/page.tsx` with your desired Copilotkit components ([see docs](https://docs.copilotkit.ai/pydantic-ai))
-
 
