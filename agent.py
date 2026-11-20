@@ -1,12 +1,15 @@
 import os
+
 import chromadb
 import pydantic
+from fastapi import FastAPI, Request, Response
 from pydantic_ai import Agent
-from pydantic_ai.models.openai import OpenAIResponsesModel
-from pydantic_ai.providers.openai import OpenAIProvider
+from pydantic_ai.models.openai import OpenAIChatModel
+from pydantic_ai.providers.litellm import LiteLLMProvider
+from pydantic_ai.ui.ag_ui import AGUIAdapter
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-OPENAI_INFERENCE_MODEL = os.environ.get("OPENAI_INFERENCE_MODEL", "gpt-4o-mini")
+OPENAI_INFERENCE_MODEL = os.environ.get("OPENAI_INFERENCE_MODEL", "DeepSeek-V3.2")
 
 client = chromadb.PersistentClient()
 collection = client.get_collection("taccdoc_rag")
@@ -18,11 +21,13 @@ class RagDocument(pydantic.BaseModel):
     title: str
 
 
-rag_model = OpenAIResponsesModel(
+rag_model = OpenAIChatModel(
     OPENAI_INFERENCE_MODEL,
-    provider=OpenAIProvider(
-        api_key=os.environ.get("OPENAI_API_KEY"),
-        base_url="https://api.openai.com/v1/",
+    provider=LiteLLMProvider(
+        api_key=os.environ.get("INFERENCE_API_KEY"),
+        api_base=os.environ.get(
+            "INFERENCE_BASE_URL", "https://ai.tejas.tacc.utexas.edu"
+        ),
     ),
 )
 
@@ -33,7 +38,7 @@ Cite your sources using the provided URLs. Provide detailed instructions and cod
 Format responses in markdown with properly formatted code blocks.
 """
 
-agent = Agent(rag_model, instrument=False, instructions=instructions)
+agent = Agent(rag_model, instructions=instructions)
 
 
 @agent.tool_plain
@@ -48,9 +53,9 @@ def documentation_lookup(query: str) -> list[RagDocument]:
     return docs_res
 
 
-app = agent.to_ag_ui()
-# If you want the server to run on invocation, you can do the following:
-if __name__ == "__main__":
-    import uvicorn
+app = FastAPI()
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+@app.post("/")
+async def run_agent(request: Request) -> Response:
+    return await AGUIAdapter.dispatch_request(request, agent=agent)

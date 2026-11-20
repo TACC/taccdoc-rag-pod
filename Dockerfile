@@ -1,16 +1,17 @@
-FROM node:22
+FROM node:24
 
+RUN npm install -g pnpm
 RUN apt-get update && apt-get install -y supervisor
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 COPY pyproject.toml uv.lock .python-version ./
 RUN uv sync
 
 
-COPY client/package.json client/package-lock.json /client/
-RUN npm --prefix client ci
+COPY client/package.json client/pnpm-lock.yaml client/pnpm-workspace.yaml /client/
+RUN pnpm --prefix client ci
 
 COPY client/ client/
-RUN npm run build --prefix client
+RUN pnpm --prefix client run build 
 
 
 # Copy docs contents and populate RAG
@@ -22,5 +23,7 @@ RUN --mount=type=secret,id=env uv run --env-file=/run/secrets/env scripts/setup_
 
 EXPOSE 8888
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+ENV COPILOTKIT_TELEMETRY_DISABLED=true
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
